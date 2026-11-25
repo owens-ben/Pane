@@ -26,7 +26,7 @@ import { StateScreen } from '@/features/tabs/StateScreen';
 import { perfMark } from '@/features/perf/perfMarks';
 import { useJourneyMark, useScreenJourney } from '@/features/perf/usePerfMarks';
 import { useTheme } from '@/theme';
-import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text } from '@/ui';
+import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text, useBleedSides } from '@/ui';
 
 import { ApprovalActions, ConnectedRow, QuestionActions } from './ApprovalActions';
 import { useApprovalSort } from './approvalSortPreference';
@@ -232,11 +232,12 @@ function ApprovalTopBar({ position, onNext }: { position: string | null; onNext?
   const theme = useTheme();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
+  const bleed = useBleedSides();
   const { notice, retry } = useConnectionPresence();
   const current = useMachines().find(machine => machine.current);
   return (
     <>
-      <View style={{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: 1 }}>
+      <View style={[{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: 1 }, bleed]}>
         <View style={styles.bar}>
           <Pressable
             testID="approval-back"

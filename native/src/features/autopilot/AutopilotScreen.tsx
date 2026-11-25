@@ -17,7 +17,7 @@ import { MachineBadge } from '@/features/machines/MachineBadge';
 import { useMachines } from '@/features/machines/useMachines';
 import { useNotifyShared } from '@/features/notify/hooks';
 import { useTheme, withAlpha } from '@/theme';
-import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text } from '@/ui';
+import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text, useBleedSides } from '@/ui';
 
 import { composerPlaceholder, startBlocked, walkBar, autopilotItems } from './autopilot';
 import { DecisionCard, DecisionCardSkeleton, useDecisionAnswer } from './DecisionCard';
@@ -92,11 +92,12 @@ function Header({ snapshot }: { snapshot: AutopilotSnapshot | undefined }) {
   const theme = useTheme();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
+  const bleed = useBleedSides();
   const { notice, retry } = useConnectionPresence();
   const current = useMachines().find(machine => machine.current);
   return (
     <>
-      <View style={{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }}>
+      <View style={[{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }, bleed]}>
         <View style={styles.bar}>
           <Pressable testID="autopilot-back" accessibilityRole="button" accessibilityLabel="Back" hitSlop={4}
             onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}

@@ -4,6 +4,7 @@ export { ErrorState } from './ErrorState';
 export { Icon } from './Icon';
 export { ListRow } from './ListRow';
 export { ListSection } from './ListSection';
+export { SafeAreaSides, useBleedSides } from './SafeAreaSides';
 export { Screen } from './Screen';
 export { Sheet } from './Sheet';
 export { Skeleton, SkeletonSwap } from './Skeleton';

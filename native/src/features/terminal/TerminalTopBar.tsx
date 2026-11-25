@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useDaemon } from '@/daemon';
 import { useTheme } from '@/theme';
-import { Icon, ListRow, Text } from '@/ui';
+import { Icon, ListRow, Text, useBleedSides } from '@/ui';
 
 import { ComposerSheet, useAfterSheetCloses } from '../composer/ComposerSheet';
 import { ConnectionBar, presenceLabel } from '../hosts/ConnectionStatus';
@@ -24,6 +24,7 @@ export function TerminalTopBar({ paneName, onClearScrollback }: { paneName: stri
   const theme = useTheme();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
+  const bleed = useBleedSides();
   const { profile } = useDaemon();
   const { presence, notice, retry } = useConnectionPresence();
   const current = useMachines().find(machine => machine.current);
@@ -36,7 +37,7 @@ export function TerminalTopBar({ paneName, onClearScrollback }: { paneName: stri
 
   return (
     <>
-      <View style={{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: 1 }}>
+      <View style={[{ paddingTop: insets.top, backgroundColor: colors.surface, borderBottomColor: colors.border, borderBottomWidth: 1 }, bleed]}>
         <View style={styles.row}>
           <View style={styles.leading}>
             <Pressable

@@ -18,6 +18,7 @@ This is Expo SDK 57. Check APIs against https://docs.expo.dev/versions/v57.0.0/ 
 - Screens never retry a mutation themselves. The client resends one through a dropped connection only when the host de-duplicates request ids; a `RemoteUnconfirmedResultError` is final and means the host may have applied it: refetch and show the state.
 - Live updates come from `useDaemonEvent(channel, handler)`. The stream does not replay missed events; `DaemonProvider` refetches every query on reconnect.
 - The bearer token only travels in headers. Never put it in a URL, a log or a push payload.
+- The stack pads every screen's left and right safe areas (`SafeAreaSides`; the iPhone Duo's status column is a right inset). Screens pad top and bottom only; a bar with its own background uses `useBleedSides()`.
 - Give interactive elements a `testID` so Maestro flows can find them.
 - Stacks use `fullScreenGestureEnabled` (swipe back from anywhere). Don't put a horizontal gesture on a pushed screen's left edge without checking it still swipes back.
 - Native config goes in `app.json` or config plugins. `ios/` and `android/` are generated and ignored.

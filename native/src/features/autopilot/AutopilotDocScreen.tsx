@@ -10,7 +10,7 @@ import { useConnectionPresence } from '@/features/hosts/useConnectionPresence';
 import { useNotifyShared } from '@/features/notify/hooks';
 import { FileDoc, UrlDoc } from '@/features/pages/StaticPage';
 import { useTheme } from '@/theme';
-import { Icon, Text } from '@/ui';
+import { Icon, Text, useBleedSides } from '@/ui';
 
 import { docBackLabel, fileName, autopilotItems } from './autopilot';
 import { useAutopilot } from './hooks';
@@ -29,6 +29,7 @@ export function AutopilotDocScreen({ notifyId, path, url, label }: { notifyId?: 
   const theme = useTheme();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
+  const bleed = useBleedSides();
   const { notice, retry } = useConnectionPresence();
   const notify = useNotifyShared();
   const autopilot = useAutopilot();
@@ -39,7 +40,7 @@ export function AutopilotDocScreen({ notifyId, path, url, label }: { notifyId?: 
   const name = path ? fileName(path) : label ?? url ?? '';
   return (
     <View testID="autopilot-doc-screen" style={[styles.fill, { backgroundColor: colors.surface }]}>
-      <View style={{ paddingTop: insets.top, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }}>
+      <View style={[{ paddingTop: insets.top, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }, bleed]}>
         <View style={styles.bar}>
           <Pressable testID="autopilot-doc-back" accessibilityRole="button" accessibilityLabel={`Back to ${back}`} hitSlop={6} onPress={backToItem} style={styles.back}>
             <Icon ios="chevron.left" android="arrow_back" size={18} color={colors.text} />

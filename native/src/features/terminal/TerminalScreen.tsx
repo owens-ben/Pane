@@ -14,7 +14,7 @@ import type { RemotePwaAffordances } from '@shared/types/remoteDaemon';
 
 import { useDaemon, useInvokeMutation, useInvokeQuery } from '@/daemon';
 import { useTheme } from '@/theme';
-import { EmptyState, ErrorState, Icon, SkeletonSwap, Text } from '@/ui';
+import { EmptyState, ErrorState, Icon, SkeletonSwap, Text, useBleedSides } from '@/ui';
 
 import { BrowserTab } from '../browser/BrowserTab';
 import { DeviceTab } from '../device/DeviceTab';
@@ -81,6 +81,7 @@ export function TerminalScreen({ paneId, session, topBar, leading }: {
   const { panelId } = useLocalSearchParams<{ panelId?: string }>();
   const theme = useTheme();
   const insets = useSafeAreaInsets();
+  const screenBleed = useBleedSides();
   const { client, profile } = useDaemon();
   const { presence } = useConnectionPresence();
   const queryClient = useQueryClient();
@@ -193,7 +194,8 @@ export function TerminalScreen({ paneId, session, topBar, leading }: {
     <KeyboardAvoidingView
       testID="pane-detail-screen"
       behavior="padding"
-      style={[styles.fill, { backgroundColor: theme.colors.surface }]}
+      // Its color runs to the screen's edges, under the strip the stack keeps clear.
+      style={[styles.fill, { backgroundColor: theme.colors.surface }, screenBleed]}
     >
       {/* Dictation's audio, here so a recording survives switching tabs; mounted on first use. */}
       {voice.audio ? <VoiceAudio {...voice.audio} /> : null}
@@ -326,6 +328,9 @@ function TerminalPanel({ panel, actions, draft, onChangeDraft, composer, uploads
   onOpenShortcuts: () => void;
 }) {
   const theme = useTheme();
+  // The terminal's color and the input area's rule run to the screen's edges; what they hold stays clear of them.
+  const bleed = useBleedSides();
+  const inputBleed = useBleedSides(styles.inputArea.paddingHorizontal);
   useScreenJourney('terminal', panel.id);
   const { profile } = useDaemon();
   const { live } = useConnectionPresence();
@@ -414,7 +419,7 @@ function TerminalPanel({ panel, actions, draft, onChangeDraft, composer, uploads
 
   return (
     <>
-      <View style={[styles.fill, { backgroundColor: theme.terminal.background }]} onLayout={event => setTerminalHeight(event.nativeEvent.layout.height)}>
+      <View style={[styles.fill, { backgroundColor: theme.terminal.background }, bleed]} onLayout={event => setTerminalHeight(event.nativeEvent.layout.height)}>
         <Dimmed dimmed={disabled} style={styles.fill}>
           <View style={styles.screen}>
             <TerminalTouchSurface rows={terminal.rows} onScrollLines={terminal.scrollLines}>
@@ -467,7 +472,7 @@ function TerminalPanel({ panel, actions, draft, onChangeDraft, composer, uploads
           <View testID="terminal-refreshing" style={[StyleSheet.absoluteFill, { backgroundColor: theme.terminal.background }]} />
         ) : null}
       </View>
-      <View style={[styles.inputArea, { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border }]}>
+      <View style={[styles.inputArea, { backgroundColor: theme.colors.surface, borderTopColor: theme.colors.border }, inputBleed]}>
         {voiceSaved ? (
           <View testID="voice-keys-saved" accessibilityLiveRegion="polite" style={[styles.notice, { borderRadius: theme.radius.lg, borderColor: theme.colors.border, backgroundColor: theme.colors.surfaceRaised }]}>
             <Icon ios="checkmark" android="check" size={13} color={theme.colors.success} />

@@ -13,6 +13,7 @@ import { NotificationTapRouter, NotifyAlertCleanup } from '@/features/notificati
 import { PushRegistrationSync } from '@/features/notifications/usePushSetup';
 import { TerminalPrewarm } from '@/features/terminal/TerminalPrewarm';
 import { useTheme } from '@/theme';
+import { SafeAreaSides } from '@/ui';
 
 void SplashScreen.preventAutoHideAsync();
 
@@ -69,13 +70,21 @@ export default function RootLayout() {
   );
 }
 
+/** Routes that draw under the display's sides and pad all four edges themselves. */
+const FULL_BLEED = new Set(['connect', 'scan']);
+
 function RootStack({ signedIn }: { signedIn: boolean }) {
   const theme = useTheme();
   // Settings screens sit on the grouped page color, header included.
   const grouped = { headerStyle: { backgroundColor: theme.colors.grouped }, headerShadowVisible: false, contentStyle: { backgroundColor: theme.colors.grouped } };
   return (
     // Swipe back from anywhere on the screen, not only the left edge.
-    <Stack screenOptions={{ fullScreenGestureEnabled: true, headerBackButtonDisplayMode: 'minimal' }}>
+    <Stack
+      screenOptions={{ fullScreenGestureEnabled: true, headerBackButtonDisplayMode: 'minimal' }}
+      // Every screen stays clear of the display's sides (the iPhone Duo's status column). The camera
+      // screens fill the display and pad every edge themselves.
+      screenLayout={({ route, children }) => (FULL_BLEED.has(route.name) ? <>{children}</> : <SafeAreaSides>{children}</SafeAreaSides>)}
+    >
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="connect" options={{ headerShown: false }} />
       </Stack.Protected>

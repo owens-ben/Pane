@@ -14,7 +14,7 @@ import { ConnectionBar } from '@/features/hosts/ConnectionStatus';
 import { useConnectionPresence } from '@/features/hosts/useConnectionPresence';
 import { useNotifyShared } from '@/features/notify/hooks';
 import { useTheme } from '@/theme';
-import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text } from '@/ui';
+import { Button, ErrorState, Icon, Skeleton, SkeletonSwap, Text, useBleedSides } from '@/ui';
 
 import { answerBar, cardState, contextSource, itemPosition, relatedDocs, stackEntryFor, type CardState, type RelatedDoc, autopilotItems } from './autopilot';
 import { DecisionCard, DecisionCardSkeleton, useDecisionAnswer } from './DecisionCard';
@@ -40,6 +40,7 @@ export function AutopilotItemScreen({ notifyId }: { notifyId: string }) {
   const theme = useTheme();
   const { colors } = theme;
   const insets = useSafeAreaInsets();
+  const bleed = useBleedSides();
   const { profile } = useDaemon();
   const notify = useNotifyShared();
   const autopilot = useAutopilot();
@@ -71,7 +72,7 @@ export function AutopilotItemScreen({ notifyId }: { notifyId: string }) {
 
   return (
     <KeyboardAvoidingView testID="autopilot-item-screen" behavior="padding" style={[styles.fill, { backgroundColor: colors.surface }]}>
-      <View style={{ paddingTop: insets.top, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }}>
+      <View style={[{ paddingTop: insets.top, borderBottomColor: colors.border, borderBottomWidth: StyleSheet.hairlineWidth }, bleed]}>
         <View style={styles.bar}>
           <Pressable testID="autopilot-item-back" accessibilityRole="button" accessibilityLabel="Back to the chat" hitSlop={6} onPress={backToChat} style={styles.back}>
             <Icon ios="chevron.left" android="arrow_back" size={18} color={colors.text} />

@@ -6,7 +6,7 @@ import { ActionSheetIOS, Alert, Platform, Pressable, ScrollView, StyleSheet, Vie
 
 import { useDaemon } from '@/daemon';
 import { useTheme } from '@/theme';
-import { Icon, Text } from '@/ui';
+import { Icon, Text, useBleedSides } from '@/ui';
 
 import { PausedBadge } from '../panes/StatusBadge';
 import { tabView } from './panels';
@@ -101,8 +101,9 @@ export function PanelTabs({ panels, selectedId, onSelect, onAdd, onClose, chatId
     tabFrames.current.set(id, frame);
     if (id === selectedId) revealSelected();
   };
+  const bleed = useBleedSides(styles.bar.paddingHorizontal);
   return (
-    <View style={[styles.bar, { borderBottomColor: colors.border, backgroundColor: colors.surfaceRaised }]}>
+    <View style={[styles.bar, { borderBottomColor: colors.border, backgroundColor: colors.surfaceRaised }, bleed]}>
       <ScrollView
         ref={strip}
         onLayout={event => { view.current.width = event.nativeEvent.layout.width; }}
